@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity // desabilida todas as configurações do spring
+@EnableWebSecurity // this annotation disable all configuration of spring
 //@EnableMethodSecurity(jsr250Enabled = true) // autoriza os PreAutorized (Permissões) no controller
 public class SecurityConfiguration {
 
@@ -22,8 +22,16 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable) // só funciona get desabilita outro token
-                .httpBasic(Customizer.withDefaults()) // configura o retorno das requisições e a forma de autenticação
+                .csrf(AbstractHttpConfigurer::disable)
+                /* This csrf disable because this project it doesn't work with jsp (back and front)
+                * It doesn't need use past authentication in all as requisition
+                * With it disable the default spring configuration is only get work
+                 */
+                .httpBasic(Customizer.withDefaults())
+                /*
+
+                // configura o retorno das requisições e a forma de autenticação
+                 */
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, GET_PUBLICOS).permitAll()
                         .anyRequest().authenticated()
