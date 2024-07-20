@@ -28,14 +28,12 @@ public class SecurityConfiguration {
                 * With it disable the default spring configuration is only get work
                  */
                 .httpBasic(Customizer.withDefaults())
-                /*
-
-                // configura o retorno das requisições e a forma de autenticação
+                /* configure the return of requisitions and authentication
                  */
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, GET_PUBLICOS).permitAll()
                         .anyRequest().authenticated()
-                ) // toda requisição precisa está autenticado
+                ) // configure what requisition need of authenticated
         ;
 
         return http.build();
