@@ -1,0 +1,14 @@
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+
+spring:
+  application:
+    name: login
+
+  sql:
+    init:
+      mode: always
+      encoding: utf-8
