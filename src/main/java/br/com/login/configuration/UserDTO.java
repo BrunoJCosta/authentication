@@ -16,7 +16,8 @@ public class UserDTO implements UserDetails {
         UserDTO dto = new UserDTO();
         dto.authorities = List.of(Permission.USER_COMUM);
         dto.username = "user";
-        dto.password = "pass";
+        // password: pass
+        dto.password = "$2a$12$M4f0mNHtFcXTcDpW/SOsg.lVyMVZ4.SMMGiMWHV3h37HGsS3eXeB.";
         return dto;
     }
 }
