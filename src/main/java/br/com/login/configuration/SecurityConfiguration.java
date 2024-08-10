@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 * With it disable the default spring configuration is only get work
                  */
                 .httpBasic(Customizer.withDefaults())
-                .addFilterAfter(customFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(customFilter, BasicAuthenticationFilter.class)
                 // configure the return of requisitions and authentication
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, GET_PUBLICOS).permitAll()
