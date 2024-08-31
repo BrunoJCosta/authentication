@@ -8,7 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 @RequiredArgsConstructor
 public enum Permission implements GrantedAuthority {
 
-    USER_COMUM(1, "Usuário Comum");
+    USER_COMUM(1, "Usuário comum"),
+    USER_ADMIN(2, "Admin");
 
     private final Integer code;
     private final String description;
