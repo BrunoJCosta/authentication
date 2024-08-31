@@ -2,6 +2,9 @@ package br.com.login.users;
 
 import br.com.login.utils.SchemaUtils;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import static br.com.login.users.PersonalData.*;
 
@@ -14,6 +17,8 @@ import static br.com.login.users.PersonalData.*;
         allocationSize = 1,
         schema = SCHEMA
 )
+@Getter
+@Setter
 class PersonalData {
 
     protected static final String SCHEMA = SchemaUtils.USERS;
@@ -25,18 +30,19 @@ class PersonalData {
     @Id
     @GeneratedValue(generator = GENERATOR, strategy = GenerationType.SEQUENCE)
     @Column(name = COLUMN_ID)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String nome;
 
-    @Column(name = "cpf", columnDefinition = "varchar(11)")
+    @Column(name = "cpf", columnDefinition = "varchar(11)", unique = true, nullable = false)
     private String cpf;
 
     @Column(name = "genero")
     private String genero;
 
     @Column(name = "ativo", columnDefinition = "boolean default true")
-    private String ativo;
+    private boolean ativo;
 
 }

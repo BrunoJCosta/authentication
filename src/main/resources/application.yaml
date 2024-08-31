@@ -7,11 +7,19 @@ server:
 spring:
   application:
     name: login
+
   datasource:
-    url: jdbc:postgresql://localhost:5050/postgressql
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: aprender
+    password: Postgres
+
   sql:
     init:
       mode: always
       encoding: utf-8
+
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update

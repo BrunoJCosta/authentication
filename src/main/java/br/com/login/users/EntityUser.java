@@ -2,13 +2,11 @@ package br.com.login.users;
 
 import br.com.login.configuration.Permission;
 import br.com.login.configuration.UserDTO;
-import br.com.login.utils.SchemaUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,7 +37,7 @@ class EntityUser {
     private String password;
 
     @Column(name = "date_created")
-    private LocalDateTime dataCreated;
+    private LocalDateTime dateCreated;
 
     @Column(name = "ativo", columnDefinition = "boolean default true")
     private boolean ativo;
@@ -48,6 +46,12 @@ class EntityUser {
     @JoinColumn(name = "personal_data_id", referencedColumnName = PersonalData.COLUMN_ID,
         foreignKey = @ForeignKey(name = "fk_personal_data"), columnDefinition = "BIGINT")
     private PersonalData personalData;
+
+    @PrePersist
+    private void prePersist() {
+        this.ativo = true;
+        this.dateCreated = LocalDateTime.now();
+    }
 
     protected UserDTO userDTO() {
         UserDTO dto = new UserDTO();
