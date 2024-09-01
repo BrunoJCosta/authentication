@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, GET_PUBLICOS).permitAll()
                         .anyRequest().authenticated()
-                ); // configure what requisition need of authenticated
+                ).formLogin(httpSecurity -> httpSecurity.loginPage("/auth")); // configure what requisition need of authenticated
 
         return http.build();
     }

@@ -1,21 +1,22 @@
 package br.com.login.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+
+    private final EntityUserImmutableRepository userImmutableRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDTO userDTO = UserDTO.montarDTO();
-        if (Objects.equals(userDTO.getUsername(), username))
-            return userDTO;
+        EntityUserImmutable user = userImmutableRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
 
-        throw new UsernameNotFoundException("username not found");
+        return user.userDTO();
     }
 }

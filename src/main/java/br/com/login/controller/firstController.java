@@ -1,6 +1,8 @@
 package br.com.login.controller;
 
+import br.com.login.configuration.UserDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +18,8 @@ public class firstController {
     }
 
     @PostMapping
-    public ResponseEntity<String> testPost() {
+    public ResponseEntity<String> testPost(Authentication authentication) {
+        UserDTO principal = (UserDTO) authentication.getPrincipal();
         return ResponseEntity.ok("test post");
     }
 
