@@ -8,7 +8,7 @@ public class EntityUserStatic {
     public static final String TABLE = "users";
     public static final String COLUMN_ID = "pk";
     public static final String GENERATOR = TABLE + "_gen";
-    public static final String SEQUENCE = TABLE + COLUMN_ID;
+    public static final String SEQUENCE = TABLE + "_" + COLUMN_ID;
 
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
