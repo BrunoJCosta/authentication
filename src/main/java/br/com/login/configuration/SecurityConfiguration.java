@@ -21,6 +21,9 @@ public class SecurityConfiguration {
     public static final String[] GET_PUBLICOS = {
             "/test"
     };
+    public static final String[] POST_PUBLICOS = {
+            "/auth"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomFilter customFilter) throws Exception {
@@ -34,9 +37,11 @@ public class SecurityConfiguration {
                 .addFilterBefore(customFilter, BasicAuthenticationFilter.class)
                 // configure the return of requisitions and authentication
                 .authorizeHttpRequests(auth -> auth
+                        // configure what requisition need of authenticated
                         .requestMatchers(HttpMethod.GET, GET_PUBLICOS).permitAll()
+                        .requestMatchers(HttpMethod.POST, POST_PUBLICOS).permitAll()
                         .anyRequest().authenticated()
-                ).formLogin(httpSecurity -> httpSecurity.loginPage("/auth")); // configure what requisition need of authenticated
+                );
 
         return http.build();
     }

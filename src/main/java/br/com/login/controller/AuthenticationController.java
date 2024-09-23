@@ -18,8 +18,12 @@ public class AuthenticationController {
 
     @PostMapping
     public ResponseEntity<String> login(@RequestBody LoginFom fom) throws Exception {
-        userServices.findByEmailUserDTO(fom.getEmail(), fom.getPassword());
-        return ResponseEntity.ok("");
+        try {
+            userServices.findByEmailUserDTO(fom.email(), fom.password());
+            return ResponseEntity.ok("");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
