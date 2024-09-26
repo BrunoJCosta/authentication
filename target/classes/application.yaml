@@ -3,6 +3,7 @@ server:
     encoding:
       charset: UTF-8
       enabled: true
+  port: 8081
 
 spring:
   application:
@@ -11,7 +12,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: Postgres
+    password: postgres
 
   sql:
     init:
