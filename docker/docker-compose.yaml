@@ -1,7 +1,7 @@
 services:
   db:
     container_name: auth_db
-    image: postgres:latest
+    image: postgres:42.7.3
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -17,4 +17,5 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
