@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity // this annotation disable all configuration of spring
 @EnableMethodSecurity(jsr250Enabled = true) // autoriza os PreAutorized (Permissões) no controller
 public class SecurityConfiguration {

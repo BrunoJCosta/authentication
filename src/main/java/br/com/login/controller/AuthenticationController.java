@@ -20,7 +20,7 @@ public class AuthenticationController {
     public ResponseEntity<String> login(@RequestBody LoginFom fom) throws Exception {
         try {
             userServices.findByEmailUserDTO(fom.email(), fom.password());
-            return ResponseEntity.ok("");
+            return ResponseEntity.ok("Logado com sucesso");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

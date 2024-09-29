@@ -1,7 +1,17 @@
 services:
+  back:
+    container_name: authentication
+    image: auth_java
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_started
+
   db:
     container_name: auth_db
-    image: postgres:42.7.3
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -9,13 +19,3 @@ services:
       POSTGRES_DB: authentication
     ports:
       - "5432:5432"
-
-  back:
-    container_name: auth_java
-    image: auth_java
-    restart: always
-    ports:
-      - "8081:8081"
-    depends_on:
-      db:
-        condition: service_healthy
