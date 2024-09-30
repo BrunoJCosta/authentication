@@ -1,4 +1,5 @@
 -- this cpf is a random, i get in forDev
+
 insert into users.personal_data(pk, cpf, genero, name)
 values (1,'34164480068', 'M', 'Bruno Jereissati da Costa')
 on conflict do nothing;
