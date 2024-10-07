@@ -12,8 +12,8 @@ services:
 
   back:
     build: .
-    container_name: authentication
-    image: auth_java
+    container_name: auth_java
+    image: img_auth_java
     restart: always
     ports:
       - "8081:8081"
