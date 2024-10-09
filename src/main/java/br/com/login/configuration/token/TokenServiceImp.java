@@ -1,5 +1,7 @@
 package br.com.login.configuration.token;
 
+import br.com.login.configuration.UserDTO;
+import br.com.login.controller.TokenForm;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ class TokenServiceImp implements TokenService{
     @Override
     public TokenDTO generatedToken(String username) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(this.secret);
+            Algorithm algorithm = getAlgorithm();
 
             tokenRepository.findByUsername(username).ifPresent(tokenRepository::delete);
 
@@ -36,11 +38,16 @@ class TokenServiceImp implements TokenService{
         }
     }
 
+    private Algorithm getAlgorithm() {
+        Algorithm algorithm = Algorithm.HMAC256(this.secret);
+        return algorithm;
+    }
+
     @Override
     public String recoveryEmailByToken(String tokenForm) {
         try {
-            String tokenWithoutBearer = tokenForm.replace("Bearer ", "").strip();
-            Algorithm algorithm = Algorithm.HMAC256(this.secret);
+            String tokenWithoutBearer = tokenWithoutBearer(tokenForm);
+            Algorithm algorithm = getAlgorithm();
             Optional<EntityToken> token = tokenRepository.findByToken(tokenWithoutBearer);
             if (token.isEmpty())
                 return "";
@@ -58,5 +65,31 @@ class TokenServiceImp implements TokenService{
         } catch (Exception e) {
             return "";
         }
+    }
+
+    private static String tokenWithoutBearer(String tokenForm) {
+        return tokenForm.replace("Bearer ", "").strip();
+    }
+
+    @Override
+    public void verifyToken(TokenForm form, UserDTO user) {
+        Algorithm algorithm = getAlgorithm();
+        String tokenWithoutBearer = tokenWithoutBearer(form.token());
+        String username = JWT.require(algorithm)
+                .withIssuer("auth")
+                .build()
+                .verify(tokenWithoutBearer)
+                .getSubject();
+        if (!username.equals(user.getUsername()))
+            throw new RuntimeException("Token invalid");
+
+        EntityToken token = tokenRepository.findByToken(form.token())
+                .orElseThrow(() -> new RuntimeException("token not found"));
+
+        if (token.isValid()) {
+            return;
+        }
+        tokenRepository.delete(token);
+        throw new RuntimeException("expiration Token");
     }
 }
