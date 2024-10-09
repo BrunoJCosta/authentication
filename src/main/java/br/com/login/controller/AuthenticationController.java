@@ -1,6 +1,8 @@
 package br.com.login.controller;
 
+import br.com.login.configuration.UserDTO;
 import br.com.login.users.EntityUserServices;
+import br.com.login.users.LoginDTO;
 import br.com.login.users.LoginFom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +19,12 @@ public class AuthenticationController {
     private final EntityUserServices userServices;
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody LoginFom fom) throws Exception {
+    public ResponseEntity<LoginDTO> login(@RequestBody LoginFom fom) throws Exception {
         try {
-            userServices.findByEmailUserDTO(fom.email(), fom.password());
-            return ResponseEntity.ok("Logado com sucesso");
+            LoginDTO loginDTO = userServices.findByEmailUserDTO(fom.email(), fom.password());
+            return ResponseEntity.ok(loginDTO);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 

@@ -1,4 +1,5 @@
 create schema if not exists users;
+create schema if not exists security;
 
 create table if not exists users.personal_data(
     pk bigserial primary key,

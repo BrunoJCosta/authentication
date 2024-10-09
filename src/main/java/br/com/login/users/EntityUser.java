@@ -1,14 +1,11 @@
 package br.com.login.users;
 
-import br.com.login.configuration.Permission;
-import br.com.login.configuration.UserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static br.com.login.users.EntityUserStatic.*;
 
@@ -53,11 +50,9 @@ class EntityUser {
         this.dateCreated = LocalDateTime.now();
     }
 
-    protected UserDTO userDTO() {
-        UserDTO dto = new UserDTO();
-        dto.setUsername(email);
-        dto.setPassword(password);
-        dto.setAuthorities(List.of(Permission.USER_COMUM));
+    protected LoginDTO loginDTO() {
+        LoginDTO dto = new LoginDTO();
+        dto.setUsername(this.email);
         return dto;
     }
 }

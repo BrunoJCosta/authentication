@@ -12,6 +12,7 @@ public class UserDTO implements UserDetails {
 
     private String password;
     private String username;
+    private String token;
     private List<Permission> authorities;
 
 }
