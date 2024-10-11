@@ -1,6 +1,5 @@
 package br.com.login.configuration.token;
 
-import br.com.login.users.LoginDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,43 +33,57 @@ class EntityToken {
     private String token;
 
     @Column(name = "username")
-    @Getter(AccessLevel.NONE)
+    @Getter(AccessLevel.PUBLIC)
     @Setter(AccessLevel.NONE)
     private String username;
 
-    @Column(name = "expiration")
+    @Column(name = "token_expiration")
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private LocalDateTime expiration;
+    private LocalDateTime tokenExpiration;
+
+    @Column(name = "token_refresh_expiration")
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.PUBLIC)
+    private LocalDateTime tokenRefreshExpiration;
 
     @Column(name = "date_created")
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private LocalDateTime dateCreated;
 
-    public boolean isValid() {
-        return LocalDateTime.now().isBefore(this.expiration);
+    public boolean isRefreshValid() {
+        return this.tokenRefreshExpiration != null && LocalDateTime.now().isBefore(this.tokenRefreshExpiration);
     }
 
-    public boolean isNotValid() {
-        return !this.isValid();
+    public boolean isRefreshNotValid() {
+        return !this.isRefreshValid();
+    }
+
+    public boolean isTokenValid() {
+        return this.tokenExpiration != null && LocalDateTime.now().isBefore(this.tokenExpiration);
+    }
+
+    public boolean isTokenNotValid() {
+        return !this.isTokenValid();
     }
 
     public EntityToken(String token, String username, LocalDateTime expiration) {
         this.token = token;
         this.username = username;
-        this.expiration = expiration;
+        this.tokenRefreshExpiration = expiration;
+        this.tokenExpiration = LocalDateTime.now().plusHours(8);
     }
 
     @PrePersist
-    private void prePersist(){
+    private void prePersist() {
         this.dateCreated = LocalDateTime.now();
     }
 
     protected TokenDTO dto() {
         TokenDTO dto = new TokenDTO();
         dto.setToken(this.token);
-        dto.setExpiration(this.expiration);
+        dto.setExpiration(this.tokenRefreshExpiration);
         return dto;
     }
 }

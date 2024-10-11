@@ -25,7 +25,7 @@ class TokenServiceImp implements TokenService{
 
             tokenRepository.findByUsername(username).ifPresent(tokenRepository::delete);
 
-            LocalDateTime expiration = LocalDateTime.now().plusMinutes(20);
+            LocalDateTime expiration = getExpiration();
             String token = JWT.create().
                     withIssuer("auth")
                     .withSubject(username)
@@ -38,9 +38,12 @@ class TokenServiceImp implements TokenService{
         }
     }
 
+    private static LocalDateTime getExpiration() {
+        return LocalDateTime.now().plusMinutes(20);
+    }
+
     private Algorithm getAlgorithm() {
-        Algorithm algorithm = Algorithm.HMAC256(this.secret);
-        return algorithm;
+        return Algorithm.HMAC256(this.secret);
     }
 
     @Override
@@ -48,23 +51,29 @@ class TokenServiceImp implements TokenService{
         try {
             String tokenWithoutBearer = tokenWithoutBearer(tokenForm);
             Algorithm algorithm = getAlgorithm();
-            Optional<EntityToken> token = tokenRepository.findByToken(tokenWithoutBearer);
-            if (token.isEmpty())
+            Optional<EntityToken> entityTokenOpt = tokenRepository.findByToken(tokenWithoutBearer);
+            if (entityTokenOpt.isEmpty())
                 return "";
 
-            if (token.get().isNotValid()) {
-                tokenRepository.delete(token.get());
-                throw new RuntimeException("expiration Token");
-            }
+            String token = updateRefresh(entityTokenOpt.get());
 
             return JWT.require(algorithm)
                     .withIssuer("auth")
                     .build()
-                    .verify(token.get().getToken())
+                    .verify(token)
                     .getSubject();
         } catch (Exception e) {
             return "";
         }
+    }
+
+    private String updateRefresh(EntityToken entityToken) {
+        if (entityToken.isRefreshNotValid()) {
+            entityToken.setTokenRefreshExpiration(getExpiration());
+            return tokenRepository.save(entityToken).getToken();
+        }
+
+        return entityToken.getToken();
     }
 
     private static String tokenWithoutBearer(String tokenForm) {
@@ -80,16 +89,22 @@ class TokenServiceImp implements TokenService{
                 .build()
                 .verify(tokenWithoutBearer)
                 .getSubject();
-        if (!username.equals(user.getUsername()))
-            throw new RuntimeException("Token invalid");
 
-        EntityToken token = tokenRepository.findByToken(form.token())
+        RuntimeException tokenInvalid = new RuntimeException("Token invalid");
+        if (!username.equals(user.getUsername()))
+            throw tokenInvalid;
+
+        EntityToken entityToken = tokenRepository.findByToken(form.token())
                 .orElseThrow(() -> new RuntimeException("token not found"));
 
-        if (token.isValid()) {
-            return;
+        if (!entityToken.getUsername().equals(user.getUsername()))
+            throw tokenInvalid;
+
+        if (entityToken.isTokenNotValid()) {
+            tokenRepository.delete(entityToken);
+            throw new RuntimeException("expiration Token");
         }
-        tokenRepository.delete(token);
-        throw new RuntimeException("expiration Token");
+
+        updateRefresh(entityToken);
     }
 }

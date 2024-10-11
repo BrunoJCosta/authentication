@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 public interface TokenService {
 
     TokenDTO generatedToken(String username);
+
     String recoveryEmailByToken(String token);
 
     void verifyToken(TokenForm form, UserDTO authentication);

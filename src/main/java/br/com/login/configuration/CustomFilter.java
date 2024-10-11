@@ -34,6 +34,7 @@ public class CustomFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
         }
         filterChain.doFilter(request, response);
     }
