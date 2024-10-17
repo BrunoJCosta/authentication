@@ -1,22 +1,28 @@
 package br.com.login.configuration.token;
 
-import br.com.login.configuration.UserDTO;
 import br.com.login.controller.TokenForm;
+import br.com.login.users.LoginDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 class TokenServiceImp implements TokenService{
 
-    private final String secret = "sopadkjoaiofewnmsifvnesionrfioes";
+    @Value("${environment.token-secret}")
+    private String secret;
     private final EntityTokenRepository tokenRepository;
+    private final static Integer TEMPO_TOKEN_HORAS = 1;
 
     @Override
     public TokenDTO generatedToken(String username) {
@@ -25,12 +31,15 @@ class TokenServiceImp implements TokenService{
 
             tokenRepository.findByUsername(username).ifPresent(tokenRepository::delete);
 
-            LocalDateTime expiration = getExpiration();
+//            LocalDateTime expiration = getExpiration();
+            int tempoToken = TEMPO_TOKEN_HORAS * 1000;
+            Date expiresAt = new Date(System.currentTimeMillis() + 600L * tempoToken);
             String token = JWT.create().
                     withIssuer("auth")
                     .withSubject(username)
-                    .withExpiresAt(expiration.toInstant(ZoneOffset.of("-03:00")))
+                    .withExpiresAt(expiresAt)
                     .sign(algorithm);
+            LocalDateTime expiration = LocalDateTime.ofInstant(expiresAt.toInstant(), ZoneId.systemDefault());
             EntityToken entityToken = new EntityToken(token, username, expiration);
             return tokenRepository.save(entityToken).dto();
         } catch (Exception e) {
@@ -38,8 +47,11 @@ class TokenServiceImp implements TokenService{
         }
     }
 
+    private static LocalDateTime getExpirationRefresh() {
+        return LocalDateTime.now().plusHours(20);
+    }
     private static LocalDateTime getExpiration() {
-        return LocalDateTime.now().plusMinutes(20);
+        return LocalDateTime.now().plusHours(TEMPO_TOKEN_HORAS);
     }
 
     private Algorithm getAlgorithm() {
@@ -55,25 +67,27 @@ class TokenServiceImp implements TokenService{
             if (entityTokenOpt.isEmpty())
                 return "";
 
-            String token = updateRefresh(entityTokenOpt.get());
+            EntityToken entityToken = entityTokenOpt.get();
+            if (entityToken.isRefreshNotValid())
+                return "";
 
             return JWT.require(algorithm)
                     .withIssuer("auth")
                     .build()
-                    .verify(token)
+                    .verify(entityToken.getToken())
                     .getSubject();
         } catch (Exception e) {
             return "";
         }
     }
 
-    private String updateRefresh(EntityToken entityToken) {
+    private EntityToken updateRefresh(EntityToken entityToken) {
         if (entityToken.isRefreshNotValid()) {
-            entityToken.setTokenRefreshExpiration(getExpiration());
-            return tokenRepository.save(entityToken).getToken();
+            entityToken.setTokenRefreshExpiration(getExpirationRefresh());
+            return tokenRepository.save(entityToken);
         }
 
-        return entityToken.getToken();
+        return entityToken;
     }
 
     private static String tokenWithoutBearer(String tokenForm) {
@@ -81,7 +95,7 @@ class TokenServiceImp implements TokenService{
     }
 
     @Override
-    public void verifyToken(TokenForm form, UserDTO user) {
+    public LoginDTO verifyToken(TokenForm form) {
         Algorithm algorithm = getAlgorithm();
         String tokenWithoutBearer = tokenWithoutBearer(form.token());
         String username = JWT.require(algorithm)
@@ -90,21 +104,18 @@ class TokenServiceImp implements TokenService{
                 .verify(tokenWithoutBearer)
                 .getSubject();
 
-        RuntimeException tokenInvalid = new RuntimeException("Token invalid");
-        if (!username.equals(user.getUsername()))
-            throw tokenInvalid;
-
         EntityToken entityToken = tokenRepository.findByToken(form.token())
                 .orElseThrow(() -> new RuntimeException("token not found"));
 
-        if (!entityToken.getUsername().equals(user.getUsername()))
+        RuntimeException tokenInvalid = new RuntimeException("Token invalid");
+        if (!entityToken.getUsername().equals(username))
             throw tokenInvalid;
 
         if (entityToken.isTokenNotValid()) {
             tokenRepository.delete(entityToken);
             throw new RuntimeException("expiration Token");
         }
-
-        updateRefresh(entityToken);
+        EntityToken tokenUpdated = updateRefresh(entityToken);
+        return tokenUpdated.loginDTO(username);
     }
 }

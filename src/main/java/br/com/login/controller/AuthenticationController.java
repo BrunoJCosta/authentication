@@ -32,9 +32,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refreshToken(@RequestBody TokenForm form, Authentication authentication) throws Exception {
-        tokenService.verifyToken(form, (UserDTO) authentication.getPrincipal());
-        return ResponseEntity.ok("");
+    public ResponseEntity<LoginDTO> refreshToken(@RequestBody TokenForm form) throws Exception {
+        LoginDTO loginDTO = tokenService.verifyToken(form);
+        return ResponseEntity.ok(loginDTO);
     }
 
 }

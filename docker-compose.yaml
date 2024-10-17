@@ -17,6 +17,8 @@ services:
     restart: always
     ports:
       - "8081:8081"
+    environment:
+      TOKEN-SECRET: "hsdiofh398w5h48392hf8h23489f"
     depends_on:
       db:
         condition: service_started

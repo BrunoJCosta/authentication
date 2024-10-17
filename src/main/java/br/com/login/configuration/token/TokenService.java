@@ -2,7 +2,7 @@ package br.com.login.configuration.token;
 
 import br.com.login.configuration.UserDTO;
 import br.com.login.controller.TokenForm;
-import org.springframework.security.core.Authentication;
+import br.com.login.users.LoginDTO;
 
 public interface TokenService {
 
@@ -10,5 +10,5 @@ public interface TokenService {
 
     String recoveryEmailByToken(String token);
 
-    void verifyToken(TokenForm form, UserDTO authentication);
+    LoginDTO verifyToken(TokenForm form);
 }

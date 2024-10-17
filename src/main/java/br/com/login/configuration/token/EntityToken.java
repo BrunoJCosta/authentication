@@ -1,5 +1,6 @@
 package br.com.login.configuration.token;
 
+import br.com.login.users.LoginDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -86,6 +87,20 @@ class EntityToken {
         dto.setExpiration(this.tokenRefreshExpiration);
         return dto;
     }
+
+    protected LoginDTO loginDTO() {
+        LoginDTO dto = new LoginDTO();
+        dto.setExpiration(this.tokenRefreshExpiration);
+        dto.setToken(this.token);
+        return dto;
+    }
+
+    protected LoginDTO loginDTO(String username) {
+        LoginDTO dto = this.loginDTO();
+        dto.setUsername(username);
+        return dto;
+    }
+
 }
 
 

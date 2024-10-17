@@ -21,7 +21,8 @@ public class SecurityConfiguration {
             "/test"
     };
     public static final String[] POST_PUBLICOS = {
-            "/auth"
+            "/auth",
+            "/auth/refresh"
     };
 
     @Bean
