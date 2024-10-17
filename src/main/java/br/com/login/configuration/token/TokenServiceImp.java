@@ -6,13 +6,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Date;
+import java.time.*;
 import java.util.Optional;
 
 @Service
@@ -31,15 +27,14 @@ class TokenServiceImp implements TokenService{
 
             tokenRepository.findByUsername(username).ifPresent(tokenRepository::delete);
 
-//            LocalDateTime expiration = getExpiration();
-            int tempoToken = TEMPO_TOKEN_HORAS * 1000;
-            Date expiresAt = new Date(System.currentTimeMillis() + 600L * tempoToken);
+            OffsetTime offsetTime = OffsetTime.now(ZoneOffset.systemDefault()).plusMinutes(1);
+            Instant instant = getExpiration().toInstant(offsetTime.getOffset());
             String token = JWT.create().
                     withIssuer("auth")
                     .withSubject(username)
-                    .withExpiresAt(expiresAt)
+                    .withExpiresAt(instant)
                     .sign(algorithm);
-            LocalDateTime expiration = LocalDateTime.ofInstant(expiresAt.toInstant(), ZoneId.systemDefault());
+            LocalDateTime expiration = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
             EntityToken entityToken = new EntityToken(token, username, expiration);
             return tokenRepository.save(entityToken).dto();
         } catch (Exception e) {

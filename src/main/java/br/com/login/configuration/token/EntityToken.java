@@ -84,13 +84,15 @@ class EntityToken {
     protected TokenDTO dto() {
         TokenDTO dto = new TokenDTO();
         dto.setToken(this.token);
-        dto.setExpiration(this.tokenRefreshExpiration);
+        dto.setExpiration(this.tokenExpiration);
+        dto.setExpirationRefresh(this.tokenRefreshExpiration);
         return dto;
     }
 
     protected LoginDTO loginDTO() {
         LoginDTO dto = new LoginDTO();
-        dto.setExpiration(this.tokenRefreshExpiration);
+        dto.setExpirationToken(this.tokenExpiration);
+        dto.setExpirationRefresh(this.tokenRefreshExpiration);
         dto.setToken(this.token);
         return dto;
     }

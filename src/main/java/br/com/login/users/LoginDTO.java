@@ -11,5 +11,6 @@ public class LoginDTO {
 
     private String token;
     private String username;
-    private LocalDateTime expiration;
+    private LocalDateTime expirationToken;
+    private LocalDateTime expirationRefresh;
 }

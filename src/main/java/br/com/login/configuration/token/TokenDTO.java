@@ -11,5 +11,6 @@ public class TokenDTO {
 
     private String token;
     private LocalDateTime expiration;
+    private LocalDateTime expirationRefresh;
 
 }
