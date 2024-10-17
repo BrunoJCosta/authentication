@@ -20,3 +20,6 @@ spring:
   sql:
     init:
       data-locations: []
+
+environment:
+  token-secret: 3j4rfj3498fj348j4d8439dj843j8d3j8e9j8j3
