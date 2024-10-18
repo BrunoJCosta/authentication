@@ -32,7 +32,6 @@ public class JsonDateConfiguration {
                         new LocalTimeDeserializer(time()),
                         new LocalDateTimeDeserializer(dateTime())
                 );
-
     }
 
     private static DateTimeFormatter date() {

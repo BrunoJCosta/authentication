@@ -1,6 +1,5 @@
 package br.com.login.configuration;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,13 +13,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 @EnableWebSecurity // this annotation disable all configuration of spring
-@EnableMethodSecurity(jsr250Enabled = true) // autoriza os PreAutorized (Permissões) no controller
+@EnableMethodSecurity(jsr250Enabled = true) // authorize os PreAuthorized (Permission) no controller
 public class SecurityConfiguration {
 
-    public static final String[] GET_PUBLICOS = {
+    public static final String[] GET_PUBLIC = {
             "/test"
     };
-    public static final String[] POST_PUBLICOS = {
+    public static final String[] POST_PUBLIC = {
             "/auth",
             "/auth/refresh"
     };
@@ -38,8 +37,8 @@ public class SecurityConfiguration {
                 // configure the return of requisitions and authentication
                 .authorizeHttpRequests(auth -> auth
                         // configure what requisition need of authenticated
-                        .requestMatchers(HttpMethod.GET, GET_PUBLICOS).permitAll()
-                        .requestMatchers(HttpMethod.POST, POST_PUBLICOS).permitAll()
+                        .requestMatchers(HttpMethod.GET, GET_PUBLIC).permitAll()
+                        .requestMatchers(HttpMethod.POST, POST_PUBLIC).permitAll()
                         .anyRequest().authenticated()
                 );
 
