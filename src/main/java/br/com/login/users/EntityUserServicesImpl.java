@@ -26,7 +26,7 @@ public class EntityUserServicesImpl implements EntityUserServices {
         TokenDTO token = tokenService.generatedToken(email);
         userDTO.setToken(token.getToken());
         userDTO.setExpirationToken(token.getExpiration());
-        userDTO.setExpirationToken(token.getExpirationRefresh());
+        userDTO.setExpirationRefresh(token.getExpirationRefresh());
         return userDTO;
     }
 

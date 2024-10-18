@@ -72,8 +72,8 @@ class EntityToken {
     public EntityToken(String token, String username, LocalDateTime expiration) {
         this.token = token;
         this.username = username;
-        this.tokenRefreshExpiration = expiration;
-        this.tokenExpiration = LocalDateTime.now().plusHours(8);
+        this.tokenRefreshExpiration = LocalDateTime.now().plusSeconds(30);
+        this.tokenExpiration = expiration;
     }
 
     @PrePersist

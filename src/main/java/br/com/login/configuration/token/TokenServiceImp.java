@@ -18,17 +18,15 @@ class TokenServiceImp implements TokenService{
     @Value("${environment.token-secret}")
     private String secret;
     private final EntityTokenRepository tokenRepository;
-    private final static Integer TEMPO_TOKEN_HORAS = 1;
+    private final static Integer TEMPO_TOKEN_HORAS = 8;
 
     @Override
     public TokenDTO generatedToken(String username) {
         try {
             Algorithm algorithm = getAlgorithm();
-
             tokenRepository.findByUsername(username).ifPresent(tokenRepository::delete);
 
-            OffsetTime offsetTime = OffsetTime.now(ZoneOffset.systemDefault()).plusMinutes(1);
-            Instant instant = getExpiration().toInstant(offsetTime.getOffset());
+            Instant instant = getInstantExpiration();
             String token = JWT.create().
                     withIssuer("auth")
                     .withSubject(username)
@@ -42,11 +40,13 @@ class TokenServiceImp implements TokenService{
         }
     }
 
-    private static LocalDateTime getExpirationRefresh() {
-        return LocalDateTime.now().plusHours(20);
+    private static Instant getInstantExpiration() {
+        OffsetTime offsetTime = OffsetTime.now(ZoneOffset.systemDefault());
+        return LocalDateTime.now().plusHours(TEMPO_TOKEN_HORAS).toInstant(offsetTime.getOffset());
     }
-    private static LocalDateTime getExpiration() {
-        return LocalDateTime.now().plusHours(TEMPO_TOKEN_HORAS);
+
+    private static LocalDateTime getExpirationRefresh() {
+        return LocalDateTime.now().plusMinutes(20);
     }
 
     private Algorithm getAlgorithm() {
@@ -57,7 +57,6 @@ class TokenServiceImp implements TokenService{
     public String recoveryEmailByToken(String tokenForm) {
         try {
             String tokenWithoutBearer = tokenWithoutBearer(tokenForm);
-            Algorithm algorithm = getAlgorithm();
             Optional<EntityToken> entityTokenOpt = tokenRepository.findByToken(tokenWithoutBearer);
             if (entityTokenOpt.isEmpty())
                 return "";
@@ -66,23 +65,10 @@ class TokenServiceImp implements TokenService{
             if (entityToken.isRefreshNotValid())
                 return "";
 
-            return JWT.require(algorithm)
-                    .withIssuer("auth")
-                    .build()
-                    .verify(entityToken.getToken())
-                    .getSubject();
+            return entityToken.getUsername();
         } catch (Exception e) {
             return "";
         }
-    }
-
-    private EntityToken updateRefresh(EntityToken entityToken) {
-        if (entityToken.isRefreshNotValid()) {
-            entityToken.setTokenRefreshExpiration(getExpirationRefresh());
-            return tokenRepository.save(entityToken);
-        }
-
-        return entityToken;
     }
 
     private static String tokenWithoutBearer(String tokenForm) {
@@ -99,7 +85,7 @@ class TokenServiceImp implements TokenService{
                 .verify(tokenWithoutBearer)
                 .getSubject();
 
-        EntityToken entityToken = tokenRepository.findByToken(form.token())
+        EntityToken entityToken = tokenRepository.findByToken(tokenWithoutBearer)
                 .orElseThrow(() -> new RuntimeException("token not found"));
 
         RuntimeException tokenInvalid = new RuntimeException("Token invalid");
@@ -110,7 +96,11 @@ class TokenServiceImp implements TokenService{
             tokenRepository.delete(entityToken);
             throw new RuntimeException("expiration Token");
         }
-        EntityToken tokenUpdated = updateRefresh(entityToken);
-        return tokenUpdated.loginDTO(username);
+
+        if (entityToken.isRefreshNotValid()) {
+            entityToken.setTokenRefreshExpiration(getExpirationRefresh());
+            return tokenRepository.save(entityToken).loginDTO(username);
+        }
+        return entityToken.loginDTO(username);
     }
 }
