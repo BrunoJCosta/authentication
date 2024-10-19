@@ -1,6 +1,5 @@
 package br.com.login.configuration.token;
 
-import br.com.login.controller.TokenForm;
 import br.com.login.users.LoginDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
