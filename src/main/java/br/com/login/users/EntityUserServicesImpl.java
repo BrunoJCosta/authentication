@@ -1,15 +1,15 @@
 package br.com.login.users;
 
+import br.com.login.configuration.UserDTO;
 import br.com.login.configuration.token.TokenDTO;
 import br.com.login.configuration.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
-public class EntityUserServicesImpl implements EntityUserServices {
+class EntityUserServicesImpl implements EntityUserServices {
 
     public static final Exception NOT_FOUND = new Exception("user or password Invalid");
     private final EntityUserRepository repository;
@@ -28,6 +28,13 @@ public class EntityUserServicesImpl implements EntityUserServices {
         userDTO.setExpirationToken(token.getExpiration());
         userDTO.setExpirationRefresh(token.getExpirationRefresh());
         return userDTO;
+    }
+
+    @Override
+    public ProfileDTO detail(UserDTO userDTO) {
+        EntityUser user = repository.findByEmail(userDTO.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.profileDTO();
     }
 
 }

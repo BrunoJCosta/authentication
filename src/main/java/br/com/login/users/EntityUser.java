@@ -59,5 +59,15 @@ class EntityUser {
         dto.setUsername(this.email);
         return dto;
     }
+
+    protected ProfileDTO profileDTO() {
+        ProfileDTO dto = new ProfileDTO();
+        dto.setEmail(this.email);
+        dto.setCpf(this.personalData.getCpf());
+        dto.setGender(this.personalData.getGender());
+        dto.setDataCreated(this.dateCreated);
+        dto.setLastPasswordChange(this.lastPasswordChange);
+        return dto;
+    }
 }
 
