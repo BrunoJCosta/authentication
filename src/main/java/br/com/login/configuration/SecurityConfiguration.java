@@ -20,8 +20,8 @@ public class SecurityConfiguration {
             "/test"
     };
     public static final String[] POST_PUBLIC = {
-            "/auth",
-            "/auth/refresh"
+            "authentication/auth",
+            "authentication/auth/refresh"
     };
 
     @Bean
