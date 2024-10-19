@@ -34,10 +34,14 @@ class EntityUser {
     private String password;
 
     @Column(name = "date_created")
+    @Setter(AccessLevel.NONE)
     private LocalDateTime dateCreated;
 
-    @Column(name = "ativo", columnDefinition = "boolean default true")
-    private boolean ativo;
+    @Column(name = "last_password_change")
+    private LocalDateTime lastPasswordChange;
+
+    @Column(name = "active", columnDefinition = "boolean default true")
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name = "personal_data_id", referencedColumnName = PersonalData.COLUMN_ID,
@@ -46,7 +50,7 @@ class EntityUser {
 
     @PrePersist
     private void prePersist() {
-        this.ativo = true;
+        this.active = true;
         this.dateCreated = LocalDateTime.now();
     }
 

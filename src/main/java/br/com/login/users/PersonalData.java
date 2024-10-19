@@ -39,10 +39,10 @@ class PersonalData {
     @Column(name = "cpf", columnDefinition = "varchar(11)", unique = true, nullable = false)
     private String cpf;
 
-    @Column(name = "genero", columnDefinition = "varchar(1)")
-    private String genero;
+    @Column(name = "gender", columnDefinition = "varchar(70)")
+    private String gender;
 
-    @Column(name = "ativo", columnDefinition = "boolean default true")
-    private boolean ativo;
+    @Column(name = "active", columnDefinition = "boolean default true")
+    private boolean active;
 
 }

@@ -5,15 +5,15 @@ create table if not exists users.personal_data(
     pk bigserial primary key,
     name varchar(255),
     cpf varchar(11),
-    genero varchar(1),
-    ativo boolean default true
+    gender varchar(70),
+    active boolean default true
 );
 
 create table if not exists users.users(
     pk bigserial primary key,
     email varchar(255),
     password varchar(255),
-    ativo boolean default true,
+    active boolean default true,
     date_created timestamp,
     personal_data_id bigint
         constraint fk_personal_data
