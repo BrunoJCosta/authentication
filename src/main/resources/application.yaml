@@ -10,7 +10,7 @@ spring:
     name: login
 
   datasource:
-    url: jdbc:postgresql://db:5432/authentication
+    url: jdbc:postgresql://${DATA_BASE}:5432/authentication
     username: postgres
     password: postgres
 
@@ -26,4 +26,4 @@ spring:
       ddl-auto: update
 
 environment:
-  token-secret: ${TOKEN-SECRET}
+  token-secret: ${TOKEN_SECRET}

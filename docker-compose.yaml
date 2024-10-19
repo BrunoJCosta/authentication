@@ -1,3 +1,8 @@
+networks:
+  ms:
+    name: ms-network
+    driver: bridge
+    external: true
 
 services:
   db:
@@ -10,6 +15,8 @@ services:
       POSTGRES_DB: authentication
     ports:
       - "5432:5432"
+    networks:
+    - ms
 
   back:
     build:
@@ -22,7 +29,10 @@ services:
     expose:
       - 8081
     environment:
-      TOKEN-SECRET: "hsdiofh398w5h48392hf8h23489f"
+      TOKEN_SECRET: "hsdiofh4fj839398w5h48392hf8hk213d89023489f"
+      DATA_BASE: db
+    networks:
+      - ms
     depends_on:
       db:
         condition: service_started
