@@ -13,7 +13,7 @@ public class UserService implements UserDetailsService {
     private final EntityUserImmutableRepository userImmutableRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDTO loadUserByUsername(String username) throws UsernameNotFoundException {
         EntityUserImmutable user = userImmutableRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("username not found"));
 

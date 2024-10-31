@@ -44,7 +44,7 @@ class TokenServiceImp implements TokenService{
         return LocalDateTime.now().plusHours(TEMPO_TOKEN_HORAS).toInstant(offsetTime.getOffset());
     }
 
-    private static LocalDateTime getExpirationRefresh() {
+    protected static LocalDateTime getExpirationRefresh() {
         return LocalDateTime.now().plusMinutes(20);
     }
 

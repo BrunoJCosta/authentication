@@ -72,7 +72,7 @@ class EntityToken {
     public EntityToken(String token, String username, LocalDateTime expiration) {
         this.token = token;
         this.username = username;
-        this.tokenRefreshExpiration = LocalDateTime.now().plusSeconds(30);
+        this.tokenRefreshExpiration = TokenServiceImp.getExpirationRefresh();
         this.tokenExpiration = expiration;
     }
 

@@ -29,7 +29,7 @@ public class CustomFilter extends OncePerRequestFilter {
 
             if (StringUtils.filled(email)) {
 
-                UserDetails userDetails = userService.loadUserByUsername(email);
+                UserDTO userDetails = userService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
