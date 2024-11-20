@@ -27,16 +27,19 @@ public class CustomFilter extends OncePerRequestFilter {
         if (StringUtils.filled(authorization)) {
             String email = tokenService.recoveryEmailByToken(authorization);
 
-            if (StringUtils.filled(email)) {
-
-                UserDTO userDetails = userService.loadUserByUsername(email);
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-
+            authenticated(email);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void authenticated(String email) {
+        if (StringUtils.empty(email))
+            return;
+
+        UserDTO userDetails = userService.loadUserByUsername(email);
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }
