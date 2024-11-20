@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static br.com.login.users.EntityUserStatic.*;
 
@@ -36,6 +37,13 @@ class EntityUser {
     @Column(name = "date_created")
     @Setter(AccessLevel.NONE)
     private LocalDateTime dateCreated;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "permission", schema = SCHEMA,
+            joinColumns = @JoinColumn(name = "user_id", columnDefinition = "bigint", referencedColumnName = COLUMN_ID,
+                    foreignKey = @ForeignKey(name = "fk_user")))
+    @Column(name = "permission_id")
+    private List<Integer> permission;
 
     @Column(name = "last_password_change")
     private LocalDateTime lastPasswordChange;

@@ -10,3 +10,7 @@ VALUES (1,'bruno@gmail.com',
         '$2a$12$yKL2i.1u/IbkiDgDmDjt.u5oetaYyXtwtdoSxFVhp2E3nNk3iroq.',
         '2024-09-28 21:52:00', 1)
 on conflict do nothing;
+
+insert into users.permission(user_id, permission_id)
+VALUES (1,2)
+on conflict do nothing;
