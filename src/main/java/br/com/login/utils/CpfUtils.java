@@ -1,5 +1,7 @@
 package br.com.login.utils;
 
+import java.util.List;
+
 public class CpfUtils {
 
     private static final int length_without_mask = 11;
@@ -29,6 +31,49 @@ public class CpfUtils {
 
     public static void main(String[] args) {
         System.out.println(putMask("07659045350"));
+    }
+
+    public static boolean valid(String cpf) {
+        return !invalid(cpf);
+    }
+
+    public static boolean invalid(String cpf) {
+        if (StringUtils.empty(cpf))
+            return true;
+
+        String without = removeMask(cpf);
+
+        if (without.length() != length_with_mask)
+            return true;
+
+        List<String> cpfInvalidos = List.of(
+                "00000000000", "11111111111", "22222222222", "33333333333", "44444444444",
+                "55555555555", "66666666666", "77777777777", "88888888888", "99999999999");
+        if (cpfInvalidos.contains(without))
+            return true;
+
+        Integer[] digity = new Integer[length_without_mask];
+        for (int i = 0; i < without.length(); i++) {
+            String str = String.valueOf(without.charAt(i));
+            digity[i] = Integer.parseInt(str);
+        }
+
+        int soma1 = 0;
+        for (int multiplicador = 10, index = 0; multiplicador >= 2; multiplicador--, index++) {
+            soma1 += digity[index] * multiplicador;
+        }
+        int resto1 = (soma1 * 10) % length_without_mask;
+        if (resto1 == 10) resto1 = 0;
+
+        int soma2 = 0;
+        for (int multiplicador = length_without_mask, index = 0; multiplicador >= 2; multiplicador--, index++) {
+            soma2 += digity[index] * multiplicador;
+        }
+        int resto2 = (soma2 * 10) % length_without_mask;
+        if (resto2 == 10) resto2 = 0;
+
+        //index digitos 9 – 10
+        return resto1 != digity[9] || resto2 != digity[10];
     }
 
 }
