@@ -22,7 +22,7 @@ public class firstController {
     @PreAuthorize("hasAuthority('USER_ADMIN')")
     public ResponseEntity<String> testPost(Authentication authentication) {
         UserDTO principal = (UserDTO) authentication.getPrincipal();
-        return ResponseEntity.ok("test post, user: " + principal);
+        return ResponseEntity.ok("test post, user: " + principal.getUsername());
     }
 
 }

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-interface EntityUserRepository extends JpaRepository<EntityUser, Long> {
+interface PersonalDataRepository extends JpaRepository<PersonalData, Long> {
 
-    Optional<EntityUser> findByEmailAndActiveTrue(String email);
+    Optional<PersonalData> findByCpfAndActiveTrue(String cpf);
 
 }

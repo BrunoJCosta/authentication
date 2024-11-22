@@ -29,11 +29,15 @@ public class NeedAuthenticationEntryPointConfig implements AuthenticationEntryPo
                          AuthenticationException authException) throws IOException {
         String authorization = request.getHeader("Authorization");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        if (StringUtils.empty(authorization)) {
+        if (authorizationIsNull(authorization)) {
             forbidden(response);
             return;
         }
         unauthorized(response);
+    }
+
+    private boolean authorizationIsNull(String authorization) {
+        return StringUtils.empty(authorization) || authorization.contains("Bearer null");
     }
 
     private void unauthorized(HttpServletResponse response) throws IOException {

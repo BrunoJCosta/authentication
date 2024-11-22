@@ -1,11 +1,13 @@
 package br.com.login.users;
 
+import br.com.login.configuration.Permission;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.login.users.EntityUserStatic.*;
@@ -24,11 +26,11 @@ class EntityUser {
 
     @Id
     @GeneratedValue(generator = GENERATOR, strategy = GenerationType.SEQUENCE)
-    @Column(name = COLUMN_ID)
+    @Column(name = COLUMN_ID, columnDefinition = "bigserial")
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Column(name = COLUMN_EMAIL)
+    @Column(name = COLUMN_EMAIL, nullable = false)
     private String email;
 
     @Column(name = COLUMN_PASSWORD)
@@ -43,10 +45,13 @@ class EntityUser {
             joinColumns = @JoinColumn(name = "user_id", columnDefinition = "bigint", referencedColumnName = COLUMN_ID,
                     foreignKey = @ForeignKey(name = "fk_user")))
     @Column(name = "permission_id")
-    private List<Integer> permission;
+    private List<Integer> permission = new ArrayList<>();
 
     @Column(name = "last_password_change")
     private LocalDateTime lastPasswordChange;
+
+    @Column(name = "user_created")
+    private String userCreated;
 
     @Column(name = "active", columnDefinition = "boolean default true")
     private boolean active;
@@ -71,11 +76,16 @@ class EntityUser {
     protected ProfileDTO profileDTO() {
         ProfileDTO dto = new ProfileDTO();
         dto.setEmail(this.email);
+        dto.setName(this.personalData.getNome());
         dto.setCpf(this.personalData.getCpf());
         dto.setGender(this.personalData.getGender());
         dto.setDataCreated(this.dateCreated);
         dto.setLastPasswordChange(this.lastPasswordChange);
         return dto;
+    }
+
+    public void addPermission(Permission permission) {
+        this.permission.add(permission.getCode());
     }
 }
 
