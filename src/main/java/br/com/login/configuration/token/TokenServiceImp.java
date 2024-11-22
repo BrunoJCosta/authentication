@@ -1,5 +1,9 @@
 package br.com.login.configuration.token;
 
+import br.com.login.exception.AuthException;
+import br.com.login.exception.TokenExpiration;
+import br.com.login.exception.TokenInvalid;
+import br.com.login.exception.TokenNotFound;
 import br.com.login.users.LoginDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -75,7 +79,7 @@ class TokenServiceImp implements TokenService{
     }
 
     @Override
-    public LoginDTO verifyToken(TokenForm form) {
+    public LoginDTO verifyToken(TokenForm form) throws AuthException {
         Algorithm algorithm = getAlgorithm();
         String tokenWithoutBearer = tokenWithoutBearer(form.token());
         String username = JWT.require(algorithm)
@@ -85,15 +89,14 @@ class TokenServiceImp implements TokenService{
                 .getSubject();
 
         EntityToken entityToken = tokenRepository.findByToken(tokenWithoutBearer)
-                .orElseThrow(() -> new RuntimeException("token not found"));
+                .orElseThrow(TokenNotFound::new);
 
-        RuntimeException tokenInvalid = new RuntimeException("Token invalid");
         if (!entityToken.getUsername().equals(username))
-            throw tokenInvalid;
+            throw new TokenInvalid();
 
         if (entityToken.isTokenNotValid()) {
             tokenRepository.delete(entityToken);
-            throw new RuntimeException("expiration Token");
+            throw new TokenExpiration();
         }
 
         if (entityToken.isRefreshNotValid()) {
