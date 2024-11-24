@@ -11,6 +11,3 @@ VALUES (1,'bruno@gmail.com',
         '2024-09-28 21:52:00', 1)
 on conflict do nothing;
 
-insert into users.permission(user_id, permission_id)
-VALUES (1,2)
-on conflict do nothing;

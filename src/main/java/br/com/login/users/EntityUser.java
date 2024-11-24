@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static br.com.login.users.EntityUserStatic.*;
 
@@ -45,13 +47,16 @@ class EntityUser {
             joinColumns = @JoinColumn(name = "user_id", columnDefinition = "bigint", referencedColumnName = COLUMN_ID,
                     foreignKey = @ForeignKey(name = "fk_user")))
     @Column(name = "permission_id")
-    private List<Integer> permission = new ArrayList<>();
+    private Set<Integer> permission = new HashSet<>();
 
     @Column(name = "last_password_change")
     private LocalDateTime lastPasswordChange;
 
     @Column(name = "user_created")
     private String userCreated;
+
+    @Column(name = "automatic", columnDefinition = "boolean default false")
+    private boolean automatic;
 
     @Column(name = "active", columnDefinition = "boolean default true")
     private boolean active;
@@ -80,6 +85,7 @@ class EntityUser {
         dto.setCpf(this.personalData.getCpf());
         dto.setGender(this.personalData.getGender());
         dto.setDataCreated(this.dateCreated);
+        dto.setPermission(this.permission);
         dto.setLastPasswordChange(this.lastPasswordChange);
         return dto;
     }
