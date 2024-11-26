@@ -9,4 +9,5 @@ import java.util.Optional;
 interface EntityUserImmutableRepository extends JpaRepository<EntityUserImmutable, Long> {
 
     Optional<EntityUserImmutable> findByEmailAndActiveTrue(String email);
+
 }

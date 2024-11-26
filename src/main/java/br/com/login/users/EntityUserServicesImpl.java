@@ -68,7 +68,7 @@ class EntityUserServicesImpl implements EntityUserServices {
     }
 
     @Override
-    public void createdAutomatic(UserForm userForm) throws Exception {
+    public void createdAutomatic(UserForm userForm) throws PasswordNotMatch, PasswordIsEmpty, CpfInvalid, NameIsEmpty, EmailIsEmpty, CpfIsEmpty {
         validation(userForm);
         EntityUser user = new EntityUser();
 
