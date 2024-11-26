@@ -1,8 +1,8 @@
 package br.com.login.controller;
 
+import br.com.login.users.imutavel.EntityUserImmutableService;
 import br.com.login.configuration.token.TokenForm;
 import br.com.login.configuration.token.TokenService;
-import br.com.login.users.EntityUserServices;
 import br.com.login.users.LoginDTO;
 import br.com.login.users.LoginFom;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final EntityUserServices userServices;
+    private final EntityUserImmutableService userServices;
     private final TokenService tokenService;
 
     @PostMapping("/auth")

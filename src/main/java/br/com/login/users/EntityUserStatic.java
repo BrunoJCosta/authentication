@@ -12,4 +12,5 @@ public class EntityUserStatic {
 
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
+    public static final String COLUMN_ACTIVE = "active";
 }

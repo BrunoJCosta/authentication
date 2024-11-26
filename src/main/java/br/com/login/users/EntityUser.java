@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static br.com.login.users.EntityUserStatic.*;
@@ -44,7 +42,8 @@ class EntityUser {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "permission", schema = SCHEMA,
-            joinColumns = @JoinColumn(name = "user_id", columnDefinition = "bigint", referencedColumnName = COLUMN_ID,
+            joinColumns = @JoinColumn(name = "user_id", columnDefinition = "bigint",
+                    referencedColumnName = COLUMN_ID,
                     foreignKey = @ForeignKey(name = "fk_user")))
     @Column(name = "permission_id")
     private Set<Integer> permission = new HashSet<>();
@@ -70,12 +69,6 @@ class EntityUser {
     private void prePersist() {
         this.active = true;
         this.dateCreated = LocalDateTime.now();
-    }
-
-    protected LoginDTO loginDTO() {
-        LoginDTO dto = new LoginDTO();
-        dto.setUsername(this.email);
-        return dto;
     }
 
     protected ProfileDTO profileDTO() {

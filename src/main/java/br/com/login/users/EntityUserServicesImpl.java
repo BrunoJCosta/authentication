@@ -2,8 +2,6 @@ package br.com.login.users;
 
 import br.com.login.configuration.Permission;
 import br.com.login.configuration.UserDTO;
-import br.com.login.configuration.token.TokenDTO;
-import br.com.login.configuration.token.TokenService;
 import br.com.login.exception.*;
 import br.com.login.utils.CpfUtils;
 import br.com.login.utils.StringUtils;
@@ -18,25 +16,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class EntityUserServicesImpl implements EntityUserServices {
 
-    public static final Exception NOT_FOUND = new Exception("user or password Invalid");
+
     private final EntityUserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
     private final PersonalDataRepository personalDataRepository;
-
-    @Override
-    public LoginDTO findByEmailUserDTO(String email, String password) throws Exception {
-        EntityUser user = repository.findByEmailAndActiveTrue(email).orElseThrow(() -> NOT_FOUND);
-        boolean matchesPassword = passwordEncoder.matches(password, user.getPassword());
-        if (!matchesPassword)
-            throw NOT_FOUND;
-        LoginDTO userDTO = user.loginDTO();
-        TokenDTO token = tokenService.generatedToken(email);
-        userDTO.setToken(token.getToken());
-        userDTO.setExpirationToken(token.getExpiration());
-        userDTO.setExpirationRefresh(token.getExpirationRefresh());
-        return userDTO;
-    }
 
     @Override
     public Optional<ProfileDTO> findByEmailUserDTO(String email) {
@@ -85,7 +68,7 @@ class EntityUserServicesImpl implements EntityUserServices {
     }
 
     @Override
-    public ProfileDTO createdAutomatic(UserForm userForm) throws Exception {
+    public void createdAutomatic(UserForm userForm) throws Exception {
         validation(userForm);
         EntityUser user = new EntityUser();
 
@@ -96,10 +79,12 @@ class EntityUserServicesImpl implements EntityUserServices {
         user.setAutomatic(true);
 
         Optional<EntityUser> isEmailOpt = repository.findByEmailAndActiveTrue(userForm.email());
-        if (isEmailOpt.isPresent())
-            return isEmailOpt.get().profileDTO();
+        if (isEmailOpt.isPresent()) {
+            isEmailOpt.get().profileDTO();
+            return;
+        }
 
-        return savePersonalData(userForm, user);
+        savePersonalData(userForm, user);
     }
 
     private ProfileDTO savePersonalData(UserForm userForm, EntityUser user) {
