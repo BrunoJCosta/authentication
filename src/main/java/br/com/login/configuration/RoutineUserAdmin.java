@@ -4,6 +4,7 @@ import br.com.login.users.EntityUserServices;
 import br.com.login.users.ProfileDTO;
 import br.com.login.users.UserForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ public class RoutineUserAdmin {
 
     private final EntityUserServices entityUserService;
 
+    @Bean
     public void createdUser() throws Exception {
         String email = "bruno@gmail.com";
         Optional<ProfileDTO> userAdmin = entityUserService.findByEmailUserDTO(email);

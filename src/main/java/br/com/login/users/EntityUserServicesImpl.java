@@ -80,7 +80,7 @@ class EntityUserServicesImpl implements EntityUserServices {
 
         if (StringUtils.empty(userForm.password()) || StringUtils.empty(userForm.passwordConfirmation()))
             throw new PasswordIsEmpty();
-        if (Objects.equals(userForm.password(), userForm.passwordConfirmation()))
+        if (!Objects.equals(userForm.password(), userForm.passwordConfirmation()))
             throw new PasswordNotMatch();
     }
 

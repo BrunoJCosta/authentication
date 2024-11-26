@@ -45,4 +45,8 @@ class PersonalData {
     @Column(name = "active", columnDefinition = "boolean default true")
     private boolean active;
 
+    @PrePersist
+    private void prePersist() {
+        this.active = true;
+    }
 }

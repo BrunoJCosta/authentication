@@ -29,10 +29,6 @@ public class CpfUtils {
         return first + "." + second + "." + threeth + "-" + fourth;
     }
 
-    public static void main(String[] args) {
-        System.out.println(putMask("07659045350"));
-    }
-
     public static boolean valid(String cpf) {
         return !invalid(cpf);
     }
@@ -43,7 +39,7 @@ public class CpfUtils {
 
         String without = removeMask(cpf);
 
-        if (without.length() != length_with_mask)
+        if (without.length() != length_without_mask)
             return true;
 
         List<String> cpfInvalidos = List.of(
