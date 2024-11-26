@@ -7,6 +7,7 @@ import br.com.login.users.LoginDTO;
 import br.com.login.users.LoginFom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,6 +33,12 @@ public class AuthenticationController {
     public ResponseEntity<LoginDTO> refreshToken(@RequestBody TokenForm form) throws Exception {
         LoginDTO loginDTO = tokenService.verifyToken(form);
         return ResponseEntity.ok(loginDTO);
+    }
+
+    @PutMapping("/logout")
+    public ResponseEntity<?> logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return ResponseEntity.ok().body("");
     }
 
 }
