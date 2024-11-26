@@ -51,7 +51,7 @@ class EntityUserImmutable {
     protected UserDTO userDTO() {
         UserDTO dto = new UserDTO();
         dto.setUsername(this.email);
-        dto.setPassword(this.password);
+//        dto.setPassword(this.password);
         dto.setAuthorities(Permission.getAllById(permission));
         return dto;
     }
