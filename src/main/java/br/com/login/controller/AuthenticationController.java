@@ -1,5 +1,6 @@
 package br.com.login.controller;
 
+import br.com.login.configuration.handler.Response;
 import br.com.login.users.imutavel.EntityUserImmutableService;
 import br.com.login.configuration.token.TokenForm;
 import br.com.login.configuration.token.TokenService;
@@ -7,7 +8,6 @@ import br.com.login.users.LoginDTO;
 import br.com.login.users.LoginFom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,15 +30,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginDTO> refreshToken(@RequestBody TokenForm form) throws Exception {
+    public ResponseEntity<Response> refreshToken(@RequestBody TokenForm form) throws Exception {
         LoginDTO loginDTO = tokenService.verifyToken(form);
-        return ResponseEntity.ok(loginDTO);
+        return ResponseEntity.ok(Response.ok(loginDTO));
     }
 
-    @PutMapping("/logout")
-    public ResponseEntity<?> logout() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-        return ResponseEntity.ok().body("");
-    }
+//    @PutMapping("/logout")
+//    public ResponseEntity<Response> logout() {
+//        SecurityContextHolder.getContext().setAuthentication(null);
+//        return ResponseEntity.ok().body("");
+//    }
 
 }

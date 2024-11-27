@@ -1,4 +1,4 @@
-package br.com.login.configuration;
+package br.com.login.configuration.routine;
 
 import br.com.login.users.EntityUserServices;
 import br.com.login.users.ProfileDTO;

@@ -1,8 +1,8 @@
 package br.com.login.exception;
 
-public class CpfInvalid extends AuthException {
+public class CpfInvalid extends InvalidException {
 
     public CpfInvalid() {
-        super("cpf invalid");
+        super("cpf");
     }
 }

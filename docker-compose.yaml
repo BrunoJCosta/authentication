@@ -31,6 +31,7 @@ services:
     environment:
       TOKEN_SECRET: "hsdiofh4fj839398w5h48392hf8hk213d89023489f"
       DATA_BASE: db
+      SHOW-SQL: false
     networks:
       - ms
     depends_on:

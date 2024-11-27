@@ -1,6 +1,6 @@
 package br.com.login.users.imutavel;
 
-import br.com.login.configuration.Permission;
+import br.com.login.users.Permission;
 import br.com.login.configuration.UserDTO;
 import br.com.login.configuration.token.TokenDTO;
 import br.com.login.users.LoginDTO;

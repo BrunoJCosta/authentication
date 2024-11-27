@@ -27,8 +27,7 @@ public class SecurityConfiguration {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   CustomFilter customFilter,
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomFilter customFilter,
                                                    NeedAuthenticationEntryPointConfig entryPointConfig) throws Exception {
 
         http

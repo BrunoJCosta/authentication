@@ -1,6 +1,5 @@
 package br.com.login.users;
 
-import br.com.login.configuration.Permission;
 import br.com.login.configuration.UserDTO;
 import br.com.login.exception.*;
 import br.com.login.utils.CpfUtils;

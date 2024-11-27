@@ -1,4 +1,4 @@
-package br.com.login.configuration;
+package br.com.login.users;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import java.util.Objects;
 
 @Getter
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public enum Permission implements GrantedAuthority {
 
     USER_COMUM(1, "Usuário comum"),

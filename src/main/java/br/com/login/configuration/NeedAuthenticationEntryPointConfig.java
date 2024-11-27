@@ -1,14 +1,13 @@
 package br.com.login.configuration;
 
+import br.com.login.configuration.handler.Response;
 import br.com.login.utils.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -41,15 +40,15 @@ public class NeedAuthenticationEntryPointConfig implements AuthenticationEntryPo
     }
 
     private void unauthorized(HttpServletResponse response) throws IOException {
-        int status = HttpStatus.UNAUTHORIZED.value();
-        response.setStatus(status);
-        objectMapper.writeValue(response.getWriter(), ResponseEntity.status(status).body("Credentials Unauthorized"));
+        Response unauthorized = Response.unauthorized();
+        response.setStatus(unauthorized.getCode());
+        objectMapper.writeValue(response.getWriter(), unauthorized);
     }
 
     private void forbidden(HttpServletResponse response) throws IOException {
-        int status = HttpStatus.FORBIDDEN.value();
-        response.setStatus(status);
-        objectMapper.writeValue(response.getWriter(), ResponseEntity.status(status).body("Credentials Invalid"));
+        Response forbidden = Response.forbidden();
+        response.setStatus(forbidden.getCode());
+        objectMapper.writeValue(response.getWriter(), forbidden);
     }
 
 

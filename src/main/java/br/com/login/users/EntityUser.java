@@ -1,6 +1,5 @@
 package br.com.login.users;
 
-import br.com.login.configuration.Permission;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
