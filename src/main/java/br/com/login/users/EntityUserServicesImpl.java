@@ -1,10 +1,12 @@
 package br.com.login.users;
 
 import br.com.login.configuration.UserDTO;
+import br.com.login.controller.UserListDTO;
 import br.com.login.exception.*;
 import br.com.login.utils.CpfUtils;
 import br.com.login.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +86,14 @@ class EntityUserServicesImpl implements EntityUserServices {
         }
 
         savePersonalData(userForm, user);
+    }
+
+    @Override
+    public UserListDTO list(Pageable pageable, String name, String permission, String automatic,
+                            String cpf, String garden, String email) {
+
+//        return repository.findAllBy(pageable, name, permission, cpf, garden, email);
+        return null;
     }
 
     private ProfileDTO savePersonalData(UserForm userForm, EntityUser user) {
