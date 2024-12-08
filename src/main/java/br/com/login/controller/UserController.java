@@ -1,7 +1,6 @@
 package br.com.login.controller;
 
 import br.com.login.configuration.UserDTO;
-import br.com.login.exception.AuthException;
 import br.com.login.exception.UserNotFound;
 import br.com.login.users.EntityUserServices;
 import br.com.login.users.ProfileDTO;
@@ -34,13 +33,9 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER_ADMIN')")
     public ResponseEntity<?> createdUser(@RequestBody UserForm userForm, Authentication authentication) throws Exception {
         UserDTO principal = (UserDTO) authentication.getPrincipal();
-        try {
-            ProfileDTO created = userServices.created(userForm, principal);
-            var uri = new URI(RequestUtils.PREFIX_URL);
-            return ResponseEntity.created(uri).body(created);
-        } catch (AuthException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        ProfileDTO created = userServices.created(userForm, principal);
+        var uri = new URI(RequestUtils.PREFIX_URL);
+        return ResponseEntity.created(uri).body(created);
     }
 }
 

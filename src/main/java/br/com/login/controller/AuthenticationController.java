@@ -21,12 +21,8 @@ public class AuthenticationController {
 
     @PostMapping("/auth")
     public ResponseEntity<LoginDTO> login(@RequestBody LoginFom fom) throws Exception {
-        try {
-            LoginDTO loginDTO = userServices.findByEmailUserDTO(fom.email(), fom.password());
-            return ResponseEntity.ok(loginDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        LoginDTO loginDTO = userServices.findByEmailUserDTO(fom.email(), fom.password());
+        return ResponseEntity.ok(loginDTO);
     }
 
     @PostMapping("/refresh")

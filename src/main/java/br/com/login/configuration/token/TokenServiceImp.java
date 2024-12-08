@@ -1,9 +1,6 @@
 package br.com.login.configuration.token;
 
-import br.com.login.exception.AuthException;
-import br.com.login.exception.TokenExpiration;
-import br.com.login.exception.TokenInvalid;
-import br.com.login.exception.TokenNotFound;
+import br.com.login.exception.*;
 import br.com.login.users.LoginDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -79,7 +76,7 @@ class TokenServiceImp implements TokenService{
     }
 
     @Override
-    public LoginDTO verifyToken(TokenForm form) throws AuthException {
+    public LoginDTO verifyToken(TokenForm form) throws BadRequestException {
         Algorithm algorithm = getAlgorithm();
         String tokenWithoutBearer = tokenWithoutBearer(form.token());
         String username = JWT.require(algorithm)

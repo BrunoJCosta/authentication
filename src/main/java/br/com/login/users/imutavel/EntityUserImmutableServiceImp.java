@@ -3,7 +3,6 @@ package br.com.login.users.imutavel;
 import br.com.login.configuration.UserDTO;
 import br.com.login.configuration.token.TokenDTO;
 import br.com.login.configuration.token.TokenService;
-import br.com.login.exception.AuthException;
 import br.com.login.exception.UsernameOrPasswordNotFound;
 import br.com.login.users.LoginDTO;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ class EntityUserImmutableServiceImp implements EntityUserImmutableService {
     private final TokenService tokenService;
 
     @Override
-    public LoginDTO findByEmailUserDTO(String email, String password) throws AuthException {
+    public LoginDTO findByEmailUserDTO(String email, String password) throws UsernameOrPasswordNotFound {
         EntityUserImmutable user = repository.findByEmailAndActiveTrue(email).orElseThrow(() -> NOT_FOUND);
         boolean matchesPassword = passwordEncoder.matches(password, user.getPassword());
         if (!matchesPassword)
