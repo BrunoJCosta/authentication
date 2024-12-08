@@ -23,6 +23,9 @@ public class SecurityConfiguration {
     public static final String[] POST_PUBLIC = {
             "authentication/auth",
             "authentication/refresh",
+
+    };
+    public static final String[] PUT_PUBLIC = {
             "authentication/logout"
     };
 
@@ -43,6 +46,7 @@ public class SecurityConfiguration {
                         // configure what requisition need of authenticated
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC).permitAll()
                         .requestMatchers(HttpMethod.POST, POST_PUBLIC).permitAll()
+                        .requestMatchers(HttpMethod.PUT, PUT_PUBLIC).permitAll()
                         .anyRequest().authenticated()
                 );
 

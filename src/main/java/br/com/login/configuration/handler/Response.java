@@ -55,4 +55,8 @@ public class Response {
     public static Response conflict(String mensagem) {
         return new Response(mensagem, HttpStatus.CONFLICT);
     }
+
+    public static Response noContent() {
+        return new Response("", HttpStatus.NO_CONTENT);
+    }
 }

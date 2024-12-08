@@ -8,6 +8,7 @@ import br.com.login.users.LoginDTO;
 import br.com.login.users.LoginFom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,10 +32,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(Response.ok(loginDTO));
     }
 
-//    @PutMapping("/logout")
-//    public ResponseEntity<Response> logout() {
-//        SecurityContextHolder.getContext().setAuthentication(null);
-//        return ResponseEntity.ok().body("");
-//    }
+    @PutMapping("/logout")
+    public ResponseEntity<?> logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return ResponseEntity.noContent().build();
+    }
 
 }
