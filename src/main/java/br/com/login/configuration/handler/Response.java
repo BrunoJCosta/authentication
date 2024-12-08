@@ -16,19 +16,20 @@ public class Response {
     private String url;
 
 
-    public Response(String message, HttpStatus httpStatus) {
+    private Response(String message, HttpStatus httpStatus) {
         this.message = message;
         this.code = httpStatus.value();
         this.statusCode = httpStatus.name();
     }
-    public Response(HttpStatus httpStatus, Object response) {
+
+    private Response(HttpStatus httpStatus, Object response) {
         this.message = "";
         this.code = httpStatus.value();
         this.statusCode = httpStatus.name();
         this.response = response;
     }
 
-    public Response(HttpStatus httpStatus, Object response, String url) {
+    private Response(HttpStatus httpStatus, Object response, String url) {
         this.message = "";
         this.code = httpStatus.value();
         this.statusCode = httpStatus.name();
@@ -48,6 +49,10 @@ public class Response {
         return new Response(HttpStatus.OK, response);
     }
 
+    public static Response badRequest(Object mensagem) {
+        return new Response(HttpStatus.BAD_REQUEST, mensagem);
+    }
+
     public static Response created(Object response, String uri) {
         return new Response(HttpStatus.CREATED, response, uri);
     }
@@ -56,7 +61,4 @@ public class Response {
         return new Response(mensagem, HttpStatus.CONFLICT);
     }
 
-    public static Response noContent() {
-        return new Response("", HttpStatus.NO_CONTENT);
-    }
 }

@@ -15,14 +15,14 @@ public class ExceptionHandlerCustom {
     @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     public Response badRequest(BadRequestException exception) {
-        return new Response(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return Response.badRequest(exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     @ExceptionHandler(AlreadyExistsException.class)
     public Response AlreadyExists(AlreadyExistsException exception) {
-        return new Response(exception.getMessage(), HttpStatus.CONFLICT);
+        return Response.conflict(exception.getMessage());
     }
 
 }
