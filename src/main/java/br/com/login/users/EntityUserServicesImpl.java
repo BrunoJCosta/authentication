@@ -1,15 +1,18 @@
 package br.com.login.users;
 
 import br.com.login.configuration.UserDTO;
-import br.com.login.controller.UserListDTO;
 import br.com.login.exception.*;
 import br.com.login.utils.CpfUtils;
+import br.com.login.utils.RequestUtils;
+import br.com.login.utils.SqlUtils;
 import br.com.login.utils.StringUtils;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,6 +24,7 @@ class EntityUserServicesImpl implements EntityUserServices {
     private final EntityUserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final PersonalDataRepository personalDataRepository;
+    private final EntityManager entityManager;
 
     @Override
     public Optional<ProfileDTO> findByEmailUserDTO(String email) {
@@ -89,21 +93,27 @@ class EntityUserServicesImpl implements EntityUserServices {
     }
 
     @Override
-    public UserListDTO list(Pageable pageable, String name, String permission, String automatic,
-                            String cpf, String garden, String email) {
+    public List<UserListDTO> list(Pageable pageable, String name, String permissionStr, String automatic,
+                                  String cpf, String gender, String email) {
+        String nameFind = SqlUtils.puttingPercentage(name);
+        String cpfFind = SqlUtils.puttingPercentage(cpf);
+        String genderFind = SqlUtils.puttingPercentage(gender);
+        String emailTreaty = StringUtils.empty(email) ? "" : email.toLowerCase().strip();
+        String emailFind = SqlUtils.puttingPercentage(emailTreaty);
+        Integer permission = RequestUtils.transformInteger(permissionStr);
 
-//        return repository.findAllBy(pageable, name, permission, cpf, garden, email);
-        return null;
+        return repository.listAll(nameFind, cpfFind, genderFind, emailFind, permission, pageable)
+                .stream().map(EntityUser::listDTO).toList();
     }
 
     private ProfileDTO savePersonalData(UserForm userForm, EntityUser user) {
-        user.setEmail(userForm.email());
+        user.setEmail(userForm.email().strip().toLowerCase());
 
         personalDataRepository.findByCpfAndActiveTrue(userForm.cpf())
                 .ifPresentOrElse(user::setPersonalData, () -> {
                     PersonalData personalData = new PersonalData();
                     personalData.setCpf(userForm.cpf());
-                    personalData.setNome(userForm.name());
+                    personalData.setName(userForm.name());
                     personalData.setGender(userForm.gender());
                     PersonalData save = personalDataRepository.save(personalData);
                     user.setPersonalData(save);

@@ -29,6 +29,27 @@ public class CpfUtils {
         return first + "." + second + "." + threeth + "-" + fourth;
     }
 
+    public static String censurado(String cpf) {
+        if (StringUtils.empty(cpf))
+            return "";
+        if (cpf.length() != length_with_mask && cpf.length() != length_without_mask)
+            return "";
+        var prefixo = cpf.substring(0,3);
+        if (cpf.length() == length_without_mask) {
+            var sufixo = cpf.substring(9);
+            return prefixo + ".***.***-" + sufixo;
+        }
+        var sufixo = cpf.substring(12);
+        return prefixo + ".***.***-" + sufixo;
+    }
+
+    public static void main(String[] args) {
+        String cpfMask = censurado("0765904550");
+        String cpfWithoutMask = censurado("076.590453-50");
+        System.out.println(cpfMask);
+        System.out.println(cpfWithoutMask);
+    }
+
     public static boolean valid(String cpf) {
         return !invalid(cpf);
     }

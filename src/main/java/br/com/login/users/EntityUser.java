@@ -1,5 +1,6 @@
 package br.com.login.users;
 
+import br.com.login.utils.CpfUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -73,12 +74,24 @@ class EntityUser {
     protected ProfileDTO profileDTO() {
         ProfileDTO dto = new ProfileDTO();
         dto.setEmail(this.email);
-        dto.setName(this.personalData.getNome());
+        dto.setName(this.personalData.getName());
         dto.setCpf(this.personalData.getCpf());
         dto.setGender(this.personalData.getGender());
-        dto.setDataCreated(this.dateCreated);
+        dto.setDateCreated(this.dateCreated);
         dto.setPermission(this.permission);
         dto.setLastPasswordChange(this.lastPasswordChange);
+        return dto;
+    }
+
+    protected UserListDTO listDTO() {
+        UserListDTO dto = new UserListDTO();
+        dto.setId(this.id);
+        dto.setEmail(this.email);
+        dto.setName(this.personalData.getName());
+        dto.setCpf(CpfUtils.censurado(this.personalData.getCpf()));
+        dto.setGender(this.personalData.getGender());
+        dto.setDateCreated(this.dateCreated);
+        dto.setPermission(this.permission);
         return dto;
     }
 

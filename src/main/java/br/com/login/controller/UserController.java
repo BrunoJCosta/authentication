@@ -6,6 +6,7 @@ import br.com.login.exception.UserNotFound;
 import br.com.login.users.EntityUserServices;
 import br.com.login.users.ProfileDTO;
 import br.com.login.users.UserForm;
+import br.com.login.users.UserListDTO;
 import br.com.login.utils.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -37,7 +39,7 @@ public class UserController {
     public ResponseEntity<?> createdUser(@RequestBody UserForm userForm, Authentication authentication) throws Exception {
         UserDTO principal = (UserDTO) authentication.getPrincipal();
         ProfileDTO created = userServices.created(userForm, principal);
-        var uri = new URI(RequestUtils.PREFIX_URL);
+        var uri = new URI(RequestUtils.PREFIX_URL + "/user/");
         return ResponseEntity.created(uri).body(created);
     }
 
@@ -49,7 +51,7 @@ public class UserController {
                                          @RequestParam(required = false) String cpf,
                                          @RequestParam(required = false) String garden,
                                          @RequestParam(required = false) String email) {
-        UserListDTO dto = userServices.list(pageable, name, permission, automatic, cpf, garden, email);
+        List<UserListDTO> dto = userServices.list(pageable, name, permission, automatic, cpf, garden, email);
         return ResponseEntity.ok(Response.ok(dto));
     }
 }

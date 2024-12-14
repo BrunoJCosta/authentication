@@ -34,7 +34,7 @@ class PersonalData {
     private Long id;
 
     @Column(name = "name", nullable = false)
-    private String nome;
+    private String name;
 
     @Column(name = "cpf", columnDefinition = "varchar(11)", unique = true, nullable = false)
     private String cpf;
