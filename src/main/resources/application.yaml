@@ -20,10 +20,10 @@ spring:
       encoding: utf-8
 
   jpa:
-    generate-ddl: true
     show-sql: ${SHOW_SQL}
     hibernate:
       ddl-auto: update
+    open-in-view: false
 
 environment:
   token-secret: ${TOKEN_SECRET}
