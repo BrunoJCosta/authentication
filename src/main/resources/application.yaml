@@ -5,6 +5,18 @@ server:
       enabled: true
   port: 8081
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - log
+          - health
+          - mappings
+        exclude:
+          - env
+          - beans
+
 spring:
   application:
     name: login

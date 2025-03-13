@@ -19,4 +19,17 @@ public class ConfigurationAuthentication {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//        return configuration.getAuthenticationManager();
+//    }
+
+//    @Bean
+//    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setAuthorities(Permission.getAll());
+//        userDTO.setUsername("bruno@gmail.com");
+//        return new InMemoryUserDetailsManager(userDTO);
+//    }
+
 }

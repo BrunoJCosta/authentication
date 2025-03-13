@@ -24,6 +24,10 @@ public enum Permission implements GrantedAuthority {
         return this.name();
     }
 
+    public static List<Permission> getAll() {
+        return Arrays.asList(values());
+    }
+
     public static Permission getById(Integer id) throws Exception {
         return Arrays.stream(values()).filter(p -> Objects.equals(id, p.code)).findAny()
                 .orElseThrow(() -> new Exception("permission not found"));

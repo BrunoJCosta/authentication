@@ -17,12 +17,14 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfiguration {
 
     public static final String[] GET_PUBLIC = {
-            "/test"
+            "/test",
+            "/actuator/**"
     };
 
     public static final String[] POST_PUBLIC = {
             "authentication/auth",
             "authentication/refresh",
+            "actuator/refresh",
 
     };
     public static final String[] PUT_PUBLIC = {
